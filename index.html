@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maple Money: Build Your Life</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ── TOOLTIP ── -->
+  <div class="tooltip-box hidden" id="tooltip-box">
+    <div class="tooltip-box__title" id="tooltip-title"></div>
+    <div class="tooltip-box__body" id="tooltip-body"></div>
+  </div>
+
+  <!-- =====================================================
+       INSTRUCTIONS SCREEN
+       Full-screen overlay shown before career selection.
+  ====================================================== -->
+  <div class="instructions-screen" id="instructions-screen">
+    <div class="instructions-screen__inner">
+      <div class="career-screen__hero">
+        <span class="career-hero-leaf" aria-hidden="true">🍁</span>
+        <h1 class="career-hero-title">Maple Money</h1>
+        <p class="career-hero-sub">Build Your Life · Ages 18–30</p>
+      </div>
+
+      <div class="instructions-tabs">
+        <button class="instr-tab instr-tab--active" data-tab="overview">🎮 How to Play</button>
+        <button class="instr-tab" data-tab="accounts">💰 Your Accounts</button>
+        <button class="instr-tab" data-tab="concepts">🇨🇦 Key Concepts</button>
+      </div>
+
+      <div class="instructions-content" id="instructions-content">
+
+        <!-- HOW TO PLAY -->
+        <div class="instr-panel instr-panel--active" id="tab-overview">
+          <h2 class="instr-heading">Welcome to Maple Money</h2>
+          <p class="instr-intro">You are 18 years old with your whole financial life ahead of you. Every month you make real decisions — where to live, what to invest, how to handle unexpected costs. Your goal: build the strongest financial foundation you can by age 30.</p>
+          <div class="instr-cards">
+            <div class="instr-card">
+              <span class="instr-card__icon">📅</span>
+              <div>
+                <strong>Each Month</strong>
+                <p>You earn income, pay expenses, and choose where to put what's left. Income minus expenses = your monthly surplus. You can invest any amount up to your full cash balance.</p>
+              </div>
+            </div>
+            <div class="instr-card">
+              <span class="instr-card__icon">📈</span>
+              <div>
+                <strong>Your Investments Grow</strong>
+                <p>Money in your HISA, TFSA, RRSP, and FHSA earns returns every month. The earlier you invest, the more time compound growth has to work. Even small amounts add up significantly over 12 years.</p>
+              </div>
+            </div>
+            <div class="instr-card">
+              <span class="instr-card__icon">⚡</span>
+              <div>
+                <strong>Life Happens</strong>
+                <p>Random events fire each month — a car repair, a bonus, a medical bill. Your Emergency Fund can absorb shocks so they don't derail your plan. Without one, setbacks hit your cash directly.</p>
+              </div>
+            </div>
+            <div class="instr-card">
+              <span class="instr-card__icon">🏠</span>
+              <div>
+                <strong>Big Decisions</strong>
+                <p>After graduation you'll choose a job offer. Later you'll decide whether to rent or buy a home. These choices have lasting financial consequences — there is no single right answer.</p>
+              </div>
+            </div>
+            <div class="instr-card">
+              <span class="instr-card__icon">📊</span>
+              <div>
+                <strong>Track Everything</strong>
+                <p>Your net worth chart updates every month. Open the Portfolio tab anytime to see your investments broken down by account and asset type, including what you contributed vs. what grew.</p>
+              </div>
+            </div>
+            <div class="instr-card">
+              <span class="instr-card__icon">⚠️</span>
+              <div>
+                <strong>Watch for Limits</strong>
+                <p>The TFSA has a $7,000/year contribution limit. The FHSA has an $8,000/year and $40,000 lifetime cap. Exceeding these in real life triggers CRA penalties. The game enforces them too.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACCOUNTS -->
+        <div class="instr-panel" id="tab-accounts">
+          <h2 class="instr-heading">Your Accounts Explained</h2>
+          <div class="instr-account-list">
+            <div class="instr-account">
+              <div class="instr-account__header">
+                <span class="instr-account__icon">🏦</span>
+                <div>
+                  <strong>HISA — High Interest Savings Account</strong>
+                  <span class="instr-account__rate">4.5% APR · Fully liquid</span>
+                </div>
+              </div>
+              <p>The first thing every Canadian should set up. Your HISA earns 4.5% interest on every dollar — that's money working for you without any risk. Unlike investments, your cash here is always accessible and never loses value. In 2024 the best Canadian HISAs (EQ Bank, Oaken, Saven) pay 4–5%. Park your emergency fund and short-term savings here.</p>
+            </div>
+            <div class="instr-account">
+              <div class="instr-account__header">
+                <span class="instr-account__icon">🛡️</span>
+                <div>
+                  <strong>Emergency Fund</strong>
+                  <span class="instr-account__rate">Target: 3 months of expenses</span>
+                </div>
+              </div>
+              <p>Not an account type — a savings goal. Financial experts recommend keeping 3–6 months of living expenses set aside before investing anything else. In the game, your Emergency Fund absorbs negative life events so they don't drain your cash. Without it, a $500 car repair hits your investing budget. With it, you never skip a beat.</p>
+            </div>
+            <div class="instr-account">
+              <div class="instr-account__header">
+                <span class="instr-account__icon">🌿</span>
+                <div>
+                  <strong>TFSA — Tax-Free Savings Account</strong>
+                  <span class="instr-account__rate">$7,000/yr limit · Tax-free growth &amp; withdrawals</span>
+                </div>
+              </div>
+              <p>Canada's most flexible registered account. Every dollar you earn inside a TFSA — whether from interest, dividends, or capital gains — is completely tax-free. You can withdraw anytime for any reason and your contribution room comes back the following year. The annual limit in 2024 is $7,000. This is almost always the first account to max out.</p>
+            </div>
+            <div class="instr-account">
+              <div class="instr-account__header">
+                <span class="instr-account__icon">🏔️</span>
+                <div>
+                  <strong>RRSP — Registered Retirement Savings Plan</strong>
+                  <span class="instr-account__rate">18% of earned income · Tax deduction on contributions</span>
+                </div>
+              </div>
+              <p>Contributions reduce your taxable income — so if you earn $60,000 and contribute $5,000, you only pay tax on $55,000. Growth inside is tax-sheltered. You pay tax when you withdraw (ideally in retirement when your income is lower). Best used when you're in a higher tax bracket. Unlike a TFSA, withdrawn room is not restored.</p>
+            </div>
+            <div class="instr-account">
+              <div class="instr-account__header">
+                <span class="instr-account__icon">🏠</span>
+                <div>
+                  <strong>FHSA — First Home Savings Account</strong>
+                  <span class="instr-account__rate">$8,000/yr · $40,000 lifetime · Tax-free for first home</span>
+                </div>
+              </div>
+              <p>A newer Canadian account combining the best of TFSA and RRSP for first-time buyers. Contributions are tax-deductible like an RRSP. Withdrawals for a qualifying first home purchase are completely tax-free like a TFSA. If you ever plan to buy a home, this account should be a priority — the tax benefits are exceptional.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONCEPTS -->
+        <div class="instr-panel" id="tab-concepts">
+          <h2 class="instr-heading">Key Financial Concepts</h2>
+          <div class="instr-concepts">
+            <div class="instr-concept">
+              <strong>Net Worth</strong>
+              <p>Everything you own (assets) minus everything you owe (liabilities). Your cash, investments, and home equity are assets. Student debt, mortgage, and credit card balances are liabilities. Growing net worth is the goal.</p>
+            </div>
+            <div class="instr-concept">
+              <strong>Compound Growth</strong>
+              <p>Earning returns on your returns. If you invest $1,000 and earn 8%, you have $1,080. Next year you earn 8% on $1,080, not $1,000. Over decades this becomes exponential. Starting at 18 vs. 28 makes a dramatic difference.</p>
+            </div>
+            <div class="instr-concept">
+              <strong>OSAP</strong>
+              <p>Ontario Student Assistance Program. Provides grants (free money) and loans to eligible students. Grants never need repayment. Loans accumulate at 5% annual interest after graduation. Apply early every year.</p>
+            </div>
+            <div class="instr-concept">
+              <strong>Investment Risk vs Return</strong>
+              <p>Index funds track the whole market — steady 6–10% average returns with low fees. Stocks pick individual companies — higher potential, higher volatility. Crypto is speculative — massive swings in both directions. Match your risk to your timeline and tolerance.</p>
+            </div>
+            <div class="instr-concept">
+              <strong>Amortization</strong>
+              <p>How long it takes to fully pay off a mortgage. A 25-year amortization means 25 years of monthly payments. Shorter amortization = higher payments but less total interest. Longer = lower payments but you pay more in the long run.</p>
+            </div>
+            <div class="instr-concept">
+              <strong>Credit Score</strong>
+              <p>A number from 300–900 that represents your creditworthiness. Above 750 is excellent. Paying bills on time, keeping credit card balances low, and having a long history all help. Affects mortgage rates, rental applications, and loan approvals.</p>
+            </div>
+            <div class="instr-concept">
+              <strong>Mortgage</strong>
+              <p>A loan used to buy a home. You pay a down payment upfront (minimum 5% in Canada) and the bank covers the rest. Monthly payments cover interest + principal. As you pay down the mortgage and the home appreciates, your equity grows.</p>
+            </div>
+            <div class="instr-concept">
+              <strong>Tax Bracket</strong>
+              <p>Canada uses a progressive tax system — higher income is taxed at higher rates, but only on the portion above each threshold. RRSP contributions reduce your taxable income, potentially dropping you into a lower bracket.</p>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.instructions-content -->
+
+      <button class="btn-start-life instructions-cta" id="btn-to-career">
+        <span>Start Your Journey →</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- =====================================================
+       CAREER SELECTION SCREEN
+       Full-screen overlay shown before the game starts.
+       Hidden once the player clicks "Start Life".
+  ====================================================== -->
+  <div class="career-screen" id="career-screen">
+    <div class="career-screen__inner">
+
+      <div class="career-screen__hero">
+        <span class="career-hero-leaf" aria-hidden="true">🍁</span>
+        <h1 class="career-hero-title">Maple Money</h1>
+        <p class="career-hero-sub">Build Your Life</p>
+      </div>
+
+      <h2 class="career-screen__heading">Choose Your Future</h2>
+      <p class="career-screen__intro">Your path shapes your finances. Pick a direction, then specialise.</p>
+
+      <!-- Tier 1 buttons rendered by JS -->
+      <div class="career-tier" id="tier1-grid"></div>
+
+      <!-- Tier 2 — hidden until Tier 1 chosen -->
+      <div class="career-tier career-tier--tier2 hidden" id="tier2-wrap">
+        <p class="tier2-prompt" id="tier2-prompt">Choose a specialisation:</p>
+        <div class="career-tier__grid" id="tier2-grid"></div>
+      </div>
+
+      <!-- Summary card — hidden until Tier 2 chosen -->
+      <div class="career-summary hidden" id="career-summary">
+        <h3 class="summary-title" id="summary-title">Your Path</h3>
+        <div class="summary-stats">
+          <div class="summary-stat">
+            <span class="summary-stat__icon">🎓</span>
+            <div class="summary-stat__body">
+              <span class="summary-stat__label">Training</span>
+              <span class="summary-stat__value" id="summary-years">—</span>
+            </div>
+          </div>
+          <div class="summary-stat">
+            <span class="summary-stat__icon">💸</span>
+            <div class="summary-stat__body">
+              <span class="summary-stat__label">Tuition</span>
+              <span class="summary-stat__value" id="summary-tuition">—</span>
+            </div>
+          </div>
+          <div class="summary-stat">
+            <span class="summary-stat__icon">💼</span>
+            <div class="summary-stat__body">
+              <span class="summary-stat__label">Income</span>
+              <span class="summary-stat__value" id="summary-income">—</span>
+            </div>
+          </div>
+        </div>
+        <p class="summary-description" id="summary-description"></p>
+        <!-- "Continue" now leads to the setup wizard, not straight to game -->
+        <button class="btn-start-life" id="btn-to-setup">
+          <span>Continue →</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- =====================================================
+       SETUP WIZARD SCREEN
+       3 steps: Living Situation → Part-Time Job → Savings
+       Shown after career selection, before the game starts.
+  ====================================================== -->
+  <div class="setup-screen hidden" id="setup-screen">
+    <div class="setup-screen__inner">
+
+      <!-- Branding strip (same as career screen) -->
+      <div class="career-screen__hero">
+        <span class="career-hero-leaf" aria-hidden="true">🍁</span>
+        <h1 class="career-hero-title">Maple Money</h1>
+        <p class="career-hero-sub">Build Your Life</p>
+      </div>
+
+      <!-- Step progress indicator -->
+      <div class="setup-progress" id="setup-progress">
+        <div class="setup-progress__step setup-progress__step--active" data-step="1">
+          <span class="setup-progress__num">1</span>
+          <span class="setup-progress__label">Living</span>
+        </div>
+        <div class="setup-progress__line"></div>
+        <div class="setup-progress__step" data-step="2">
+          <span class="setup-progress__num">2</span>
+          <span class="setup-progress__label">OSAP</span>
+        </div>
+        <div class="setup-progress__line"></div>
+        <div class="setup-progress__step" data-step="3">
+          <span class="setup-progress__num">3</span>
+          <span class="setup-progress__label">Work</span>
+        </div>
+        <div class="setup-progress__line"></div>
+        <div class="setup-progress__step" data-step="4">
+          <span class="setup-progress__num">4</span>
+          <span class="setup-progress__label">Savings</span>
+        </div>
+      </div>
+
+      <!-- Step heading + intro — JS updates these -->
+      <h2 class="setup-step__heading" id="setup-heading">Where will you live?</h2>
+      <p  class="setup-step__intro"   id="setup-intro">Your living situation shapes your biggest monthly cost.</p>
+
+      <!-- Option cards — JS renders these -->
+      <div class="setup-options" id="setup-options"></div>
+
+      <!-- Impact preview — JS shows projected costs/income once option selected -->
+      <div class="setup-preview hidden" id="setup-preview"></div>
+
+      <!-- Navigation row -->
+      <div class="setup-nav">
+        <button class="btn-setup-back hidden" id="btn-setup-back">← Back</button>
+        <button class="btn-setup-next hidden" id="btn-setup-next">Next →</button>
+        <button class="btn-start-life hidden" id="btn-start-life">
+          <span>Start Life</span>
+          <span aria-hidden="true">🍁</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- =====================================================
+       MAIN GAME — 3-column layout
+       Hidden until career is chosen.
+  ====================================================== -->
+  <div class="game-shell hidden" id="main-game">
+
+    <!-- ── HOT TIP TOAST — shown occasionally, auto-dismisses ── -->
+    <!-- JS populates #tip-text and toggles .tip-toast--visible    -->
+    <div class="tip-toast" id="tip-toast" role="status" aria-live="polite">
+      <span class="tip-toast__flame" aria-hidden="true">🔥</span>
+      <div class="tip-toast__body">
+        <span class="tip-toast__label">Hot Tip</span>
+        <span class="tip-toast__text" id="tip-text"></span>
+      </div>
+      <button class="tip-toast__close" id="tip-close" aria-label="Dismiss tip">✕</button>
+    </div>
+
+    <!-- ── TOP BAR ── -->
+    <header class="topbar">
+      <div class="topbar__brand">
+        <span class="topbar__leaf" aria-hidden="true">🍁</span>
+        <span class="topbar__title">Maple Money</span>
+      </div>
+
+      <!-- Live stat pills in the top bar -->
+      <div class="topbar__stats">
+        <div class="topbar__stat">
+          <span class="topbar__stat-label">Age</span>
+          <span class="topbar__stat-val" id="display-month">18</span>
+        </div>
+        <div class="topbar__stat topbar__stat--cash">
+          <span class="topbar__stat-label">Cash</span>
+          <span class="topbar__stat-val" id="display-cash">$0</span>
+        </div>
+        <div class="topbar__stat topbar__stat--networth">
+          <span class="topbar__stat-label">Net Worth</span>
+          <span class="topbar__stat-val" id="display-networth">$0</span>
+        </div>
+        <div class="topbar__stat topbar__stat--income">
+          <span class="topbar__stat-label">Income / mo</span>
+          <span class="topbar__stat-val" id="display-income">$0</span>
+        </div>
+      </div>
+
+      <div class="topbar__actions">
+        <button class="btn-portfolio" id="btn-portfolio">📈 Portfolio</button>
+        <button class="btn-lifestyle-tab hidden" id="btn-lifestyle-tab">🎛️ Lifestyle</button>
+        <div class="speed-control" id="speed-control">
+          <button class="speed-btn speed-btn--active" data-speed="1">1×</button>
+          <button class="speed-btn" data-speed="3">3×</button>
+          <button class="speed-btn" data-speed="6">6×</button>
+          <button class="speed-btn" data-speed="12">12×</button>
+        </div>
+        <button class="btn-next" id="btn-next-month">Next Month →</button>
+      </div>
+    </header>
+
+    <!-- ── THREE COLUMN BODY ── -->
+    <div class="game-columns">
+
+      <!-- ════════════════════════════════════
+           LEFT COLUMN — Scoreboard (read-only)
+      ═════════════════════════════════════ -->
+      <aside class="col-left">
+
+        <!-- Career badge -->
+        <div class="panel career-badge" id="career-badge">
+          <span class="career-badge__icon" id="career-badge-icon">💼</span>
+          <div class="career-badge__text">
+            <span class="career-badge__label">Your Career</span>
+            <span class="career-badge__name" id="career-badge-name">—</span>
+          </div>
+          <span class="career-badge__phase" id="career-badge-phase"></span>
+        </div>
+
+        <!-- Monthly income -->
+        <div class="panel" id="income-panel">
+          <h3 class="panel__title">💼 Monthly Income</h3>
+          <div class="panel-rows">
+            <div class="panel-row" id="row-income-job">
+              <span class="panel-row__label" id="label-income-job">Pay</span>
+              <span class="panel-row__val panel-row__val--green" id="display-income-job">$0</span>
+            </div>
+            <div class="panel-row hidden" id="row-income-osap">
+              <span class="panel-row__label">OSAP</span>
+              <span class="panel-row__val panel-row__val--green" id="display-income-osap">$0</span>
+            </div>
+            <div class="panel-row panel-row--total">
+              <span class="panel-row__label">Total / mo</span>
+              <span class="panel-row__val panel-row__val--green" id="display-income">$0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Monthly fixed costs -->
+        <div class="panel" id="expenses-panel">
+          <h3 class="panel__title">🏠 Monthly Expenses</h3>
+          <div class="panel-rows">
+            <div class="panel-row" id="row-exp-rent">
+              <span class="panel-row__label">Rent</span>
+              <span class="panel-row__val" id="display-exp-rent">$0</span>
+            </div>
+            <div class="panel-row">
+              <span class="panel-row__label">Food</span>
+              <span class="panel-row__val" id="display-exp-food">$0</span>
+            </div>
+            <div class="panel-row">
+              <span class="panel-row__label">Transport</span>
+              <span class="panel-row__val" id="display-exp-transport">$0</span>
+            </div>
+            <div class="panel-row">
+              <span class="panel-row__label">📱 Phone</span>
+              <span class="panel-row__val" id="display-exp-phone">$0</span>
+            </div>
+            <div class="panel-row">
+              <span class="panel-row__label">Utilities</span>
+              <span class="panel-row__val" id="display-exp-other">$0</span>
+            </div>
+            <div class="panel-row panel-row--total">
+              <span class="panel-row__label">Total / mo</span>
+              <span class="panel-row__val panel-row__val--debt" id="display-expenses">$0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Student Loan — shown for Uni/College only -->
+        <div class="panel hidden" id="loan-panel">
+          <h3 class="panel__title">🎓 Student Debt</h3>
+          <div class="panel-rows">
+            <div class="panel-row hidden" id="row-osap-monthly">
+              <span class="panel-row__label">OSAP / mo</span>
+              <span class="panel-row__val panel-row__val--green" id="display-osap-monthly">$0</span>
+            </div>
+            <div class="panel-row hidden" id="row-osap-loan">
+              <span class="panel-row__label">Loan portion</span>
+              <span class="panel-row__val panel-row__val--debt" id="display-osap-loan">$0/mo</span>
+            </div>
+            <div class="panel-row">
+              <span class="panel-row__label">Total Debt</span>
+              <span class="panel-row__val panel-row__val--debt" id="display-debt">$0</span>
+            </div>
+            <div class="panel-row">
+              <span class="panel-row__label">Status</span>
+              <span class="panel-row__val" id="display-loan-status">In School</span>
+            </div>
+            <div class="panel-row hidden" id="row-repayment">
+              <span class="panel-row__label">Monthly Payment</span>
+              <span class="panel-row__val panel-row__val--debt" id="display-repayment">$0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accounts scoreboard -->
+        <div class="panel" id="accounts-panel">
+          <h3 class="panel__title">💰 Your Accounts</h3>
+          <div class="panel-rows">
+            <div class="panel-row">
+              <span class="panel-row__label">Cash</span>
+              <span class="panel-row__val" id="display-cash">$0</span>
+            </div>
+            <div class="panel-row">
+              <span class="panel-row__label">🏦 HISA <span class="tip-trigger" data-tip="hisa">ⓘ</span></span>
+              <span class="panel-row__val panel-row__val--green" id="display-hisa">$0</span>
+            </div>
+            <div class="panel-row">
+              <span class="panel-row__label">🛡️ Emergency Fund <span class="tip-trigger" data-tip="ef">ⓘ</span></span>
+              <span class="panel-row__val panel-row__val--green" id="display-ef">$0</span>
+            </div>
+            <div class="ef-progress" id="ef-progress-wrap">
+              <div class="ef-progress__track">
+                <div class="ef-progress__bar ef-progress__bar--low" id="ef-progress-bar" style="width:0%"></div>
+              </div>
+              <span class="ef-progress__label" id="ef-progress-label">0% of target</span>
+            </div>
+            <div class="panel-row">
+              <span class="panel-row__label">🌿 TFSA <span class="tip-trigger" data-tip="tfsa">ⓘ</span></span>
+              <span class="panel-row__val panel-row__val--green" id="display-tfsa">$0</span>
+            </div>
+            <div class="panel-row">
+              <span class="panel-row__label">🏔️ RRSP <span class="tip-trigger" data-tip="rrsp">ⓘ</span></span>
+              <span class="panel-row__val panel-row__val--green" id="display-rrsp">$0</span>
+            </div>
+            <div class="panel-row" id="row-fhsa">
+              <span class="panel-row__label">🏠 FHSA <span class="tip-trigger" data-tip="fhsa">ⓘ</span></span>
+              <span class="panel-row__val panel-row__val--green" id="display-fhsa">$0</span>
+            </div>
+            <div class="panel-row panel-row--total">
+              <span class="panel-row__label">Net Worth</span>
+              <span class="panel-row__val" id="display-networth">$0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Housing / Mortgage panel — shown only after buying -->
+        <div class="panel hidden" id="housing-panel">
+          <h3 class="panel__title">🏠 Your Home</h3>
+          <div class="panel-rows">
+            <div class="panel-row">
+              <span class="panel-row__label">Home Value</span>
+              <span class="panel-row__val panel-row__val--green" id="display-home-value">$0</span>
+            </div>
+            <div class="panel-row">
+              <span class="panel-row__label">Your Equity</span>
+              <span class="panel-row__val panel-row__val--green" id="display-home-equity">$0</span>
+            </div>
+            <div class="panel-row">
+              <span class="panel-row__label">Mortgage Balance</span>
+              <span class="panel-row__val panel-row__val--debt" id="display-mortgage-bal">$0</span>
+            </div>
+            <div class="panel-row panel-row--total">
+              <span class="panel-row__label">Monthly Payment</span>
+              <span class="panel-row__val panel-row__val--debt" id="display-mortgage-pmt">$0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lifestyle choices -->
+        <div class="panel hidden" id="lifestyle-panel">
+          <h3 class="panel__title">🎛️ Lifestyle</h3>
+          <div class="panel-rows">
+            <div class="panel-row"><span class="panel-row__label">Home</span><span class="panel-row__val" id="display-lifestyle-living">—</span></div>
+            <div class="panel-row"><span class="panel-row__label">Transport</span><span class="panel-row__val" id="display-lifestyle-transport">—</span></div>
+            <div class="panel-row"><span class="panel-row__label">Phone</span><span class="panel-row__val" id="display-lifestyle-phone">—</span></div>
+          </div>
+          <button class="btn-lifestyle-change" id="btn-lifestyle-change">✏️ Change Lifestyle</button>
+        </div>
+
+        <!-- Credit card panel — shown after card is accepted -->
+        <div class="panel hidden" id="credit-panel">
+          <h3 class="panel__title">💳 Credit Card</h3>
+          <div class="panel-rows">
+            <div class="panel-row">
+              <span class="panel-row__label">Balance</span>
+              <span class="panel-row__val panel-row__val--debt" id="display-cc-balance">$0</span>
+            </div>
+            <div class="panel-row">
+              <span class="panel-row__label">Limit</span>
+              <span class="panel-row__val" id="display-cc-limit">$0</span>
+            </div>
+            <div class="panel-row panel-row--total">
+              <span class="panel-row__label">Credit Score</span>
+              <span class="panel-row__val" id="display-credit-score">660</span>
+            </div>
+            <div class="panel-row">
+              <span class="panel-row__label"></span>
+              <span class="panel-row__val" id="display-credit-label">🟡 Fair</span>
+            </div>
+          </div>
+        </div>
+
+      </aside><!-- /.col-left -->
+
+
+      <!-- ════════════════════════════════════
+           CENTRE COLUMN — Month Card
+      ═════════════════════════════════════ -->
+      <main class="col-centre">
+
+        <!-- Welcome state — replaced by month card on first advance -->
+        <div id="welcome-card" class="welcome-card">
+          <span class="welcome-card__icon" aria-hidden="true">🌱</span>
+          <p class="welcome-card__text">
+            Welcome to <strong>Maple Money</strong>!<br />
+            Click <em>Next Month →</em> in the top bar to begin.
+          </p>
+        </div>
+
+        <!-- Portfolio page — toggled by top bar button -->
+        <div id="portfolio-page" class="portfolio-page hidden"></div>
+
+        <!-- Lifestyle/Interests page — toggled by top bar button -->
+        <div id="lifestyle-page" class="portfolio-page hidden"></div>
+
+        <!-- Month card — shown each month, hidden at start -->
+        <div id="month-card" class="month-card hidden">
+
+          <div class="month-card__header">
+            <span class="month-card__label" id="month-card-label">Month 1</span>
+            <span class="month-card__event hidden" id="month-card-event"></span>
+          </div>
+
+          <!-- EARNED -->
+          <div class="month-section month-section--earned">
+            <div class="month-section__title">💼 You Earned</div>
+            <div class="month-row" id="mrow-job">
+              <span class="month-row__label" id="mrow-job-label">Pay</span>
+              <span class="month-row__val month-row__val--green" id="mrow-job-val">$0</span>
+            </div>
+            <div class="month-row hidden" id="mrow-osap">
+              <span class="month-row__label">OSAP</span>
+              <span class="month-row__val month-row__val--green" id="mrow-osap-val">$0</span>
+            </div>
+            <div class="month-row month-row--total">
+              <span class="month-row__label">Total Earned</span>
+              <span class="month-row__val month-row__val--green" id="mrow-earned-total">$0</span>
+            </div>
+          </div>
+
+          <!-- OWED -->
+          <div class="month-section month-section--owed">
+            <div class="month-section__title">🏠 You Owe</div>
+            <div class="month-row" id="mrow-rent">
+              <span class="month-row__label">Rent</span>
+              <span class="month-row__val" id="mrow-rent-val">$0</span>
+            </div>
+            <div class="month-row">
+              <span class="month-row__label">Food</span>
+              <span class="month-row__val" id="mrow-food-val">$0</span>
+            </div>
+            <div class="month-row">
+              <span class="month-row__label">Transport</span>
+              <span class="month-row__val" id="mrow-transport-val">$0</span>
+            </div>
+            <div class="month-row">
+              <span class="month-row__label">📱 Phone</span>
+              <span class="month-row__val" id="mrow-phone-val">$0</span>
+            </div>
+            <div class="month-row">
+              <span class="month-row__label">Utilities</span>
+              <span class="month-row__val" id="mrow-other-val">$0</span>
+            </div>
+            <div class="month-row hidden" id="mrow-loan-repayment">
+              <span class="month-row__label">🎓 Loan Repayment</span>
+              <span class="month-row__val" id="mrow-loan-repayment-val">$0</span>
+            </div>
+            <div class="month-row hidden" id="mrow-mortgage-pmt">
+              <span class="month-row__label">🏠 Mortgage</span>
+              <span class="month-row__val" id="mrow-mortgage-pmt-val">$0</span>
+            </div>
+            <div class="month-row month-row--total">
+              <span class="month-row__label">Total Owed</span>
+              <span class="month-row__val month-row__val--red" id="mrow-owed-total">$0</span>
+            </div>
+          </div>
+
+          <!-- LEFT OVER -->
+          <div class="month-section month-section--leftover">
+            <div class="month-leftover-banner">
+              <span class="month-leftover-banner__label">This Month's Surplus</span>
+              <span class="month-leftover-banner__val" id="mrow-leftover">$0</span>
+            </div>
+            <div class="month-cash-balance">
+              <span class="month-cash-balance__label">Total Cash Balance</span>
+              <span class="month-cash-balance__val" id="mrow-cash-balance">$0</span>
+            </div>
+          </div>
+
+          <!-- ALLOCATE -->
+          <div class="month-section month-section--allocate">
+            <div class="month-section__title">
+              📦 Where does it go?
+              <button class="auto-contrib-toggle" id="auto-contrib-toggle">📌 Auto</button>
+            </div>
+            <div class="auto-contrib-panel hidden" id="auto-contrib-panel">
+              <div class="auto-contrib-header"><span class="auto-contrib-title">📌 Monthly Auto-Contributions</span><span class="auto-contrib-desc">These amounts will pre-fill every month automatically</span></div>
+              <div class="auto-contrib-grid">
+                <div class="auto-contrib-row"><span class="auto-contrib-icon">🛡️</span><span class="auto-contrib-label">Emergency Fund</span><div class="alloc-row__input-wrap"><span class="alloc-row__dollar">$</span><input type="number" id="auto-ef" class="alloc-input" min="0" step="50" value="0" /></div></div>
+                <div class="auto-contrib-row"><span class="auto-contrib-icon">🏦</span><span class="auto-contrib-label">HISA</span><div class="alloc-row__input-wrap"><span class="alloc-row__dollar">$</span><input type="number" id="auto-hisa" class="alloc-input" min="0" step="50" value="0" /></div></div>
+                <div class="auto-contrib-row"><span class="auto-contrib-icon">🌿</span><span class="auto-contrib-label">TFSA</span><div class="alloc-row__input-wrap"><span class="alloc-row__dollar">$</span><input type="number" id="auto-tfsa" class="alloc-input" min="0" step="50" value="0" /></div></div>
+                <div class="auto-contrib-row"><span class="auto-contrib-icon">🏔️</span><span class="auto-contrib-label">RRSP</span><div class="alloc-row__input-wrap"><span class="alloc-row__dollar">$</span><input type="number" id="auto-rrsp" class="alloc-input" min="0" step="50" value="0" /></div></div>
+                <div class="auto-contrib-row" id="auto-fhsa-row"><span class="auto-contrib-icon">🏠</span><span class="auto-contrib-label">FHSA</span><div class="alloc-row__input-wrap"><span class="alloc-row__dollar">$</span><input type="number" id="auto-fhsa" class="alloc-input" min="0" step="50" value="0" /></div></div>
+              </div>
+              <div class="auto-contrib-footer"><span class="auto-contrib-total-label">Auto-total:</span><span class="auto-contrib-total-val" id="auto-contrib-total">$0 / month</span><button class="auto-contrib-save" id="auto-contrib-save">Save Presets ✓</button></div>
+            </div>
+
+            <!-- Emergency Fund group -->
+            <div class="alloc-group">
+              <div class="alloc-row">
+                <label class="alloc-row__label" for="alloc-ef">
+                  <span class="alloc-row__icon">🛡️</span>
+                  <span class="alloc-row__name">Emergency Fund</span>
+                  <span class="alloc-row__hint" id="alloc-ef-hint">3-month buffer</span>
+                </label>
+                <div class="alloc-row__input-wrap">
+                  <span class="alloc-row__dollar">$</span>
+                  <input type="number" id="alloc-ef" class="alloc-input" min="0" step="50" value="0" placeholder="0" />
+                </div>
+              </div>
+            </div>
+
+            <!-- HISA group -->
+            <div class="alloc-group">
+              <div class="alloc-row">
+                <label class="alloc-row__label" for="alloc-hisa">
+                  <span class="alloc-row__icon">🏦</span>
+                  <span class="alloc-row__name">HISA <span class="tip-trigger" data-tip="hisa">ⓘ</span></span>
+                  <span class="alloc-row__hint">4.5% interest · liquid</span>
+                </label>
+                <div class="alloc-row__input-wrap">
+                  <span class="alloc-row__dollar">$</span>
+                  <input type="number" id="alloc-hisa" class="alloc-input" min="0" step="50" value="0" placeholder="0" />
+                </div>
+              </div>
+            </div>
+
+            <!-- TFSA group -->
+            <div class="alloc-group">
+              <div class="alloc-row">
+                <label class="alloc-row__label" for="alloc-tfsa">
+                  <span class="alloc-row__icon">🌿</span>
+                  <span class="alloc-row__name">TFSA <span class="tip-trigger" data-tip="tfsa">ⓘ</span></span>
+                  <span class="alloc-row__hint" id="alloc-tfsa-hint">Tax-free · $7,000/yr</span>
+                </label>
+                <div class="alloc-row__input-wrap">
+                  <span class="alloc-row__dollar">$</span>
+                  <input type="number" id="alloc-tfsa" class="alloc-input" min="0" step="50" value="0" placeholder="0" />
+                </div>
+              </div>
+              <div class="risk-toggle-row" id="risk-row-tfsa">
+                <span class="risk-toggle-label">Risk:</span>
+                <div class="risk-toggle-btns" data-account="tfsa">
+                  <button class="risk-btn risk-btn--active" data-type="index">📊 Index</button>
+                  <button class="risk-btn" data-type="stocks">📈 Stocks</button>
+                  <button class="risk-btn" data-type="crypto">₿ Crypto</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- RRSP group -->
+            <div class="alloc-group">
+              <div class="alloc-row">
+                <label class="alloc-row__label" for="alloc-rrsp">
+                  <span class="alloc-row__icon">🏔️</span>
+                  <span class="alloc-row__name">RRSP <span class="tip-trigger" data-tip="rrsp">ⓘ</span></span>
+                  <span class="alloc-row__hint">Reduces your tax bill</span>
+                </label>
+                <div class="alloc-row__input-wrap">
+                  <span class="alloc-row__dollar">$</span>
+                  <input type="number" id="alloc-rrsp" class="alloc-input" min="0" step="50" value="0" placeholder="0" />
+                </div>
+              </div>
+              <div class="risk-toggle-row" id="risk-row-rrsp">
+                <span class="risk-toggle-label">Risk:</span>
+                <div class="risk-toggle-btns" data-account="rrsp">
+                  <button class="risk-btn risk-btn--active" data-type="index">📊 Index</button>
+                  <button class="risk-btn" data-type="stocks">📈 Stocks</button>
+                  <button class="risk-btn" data-type="crypto">₿ Crypto</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- FHSA group -->
+            <div class="alloc-group">
+              <div class="alloc-row">
+                <label class="alloc-row__label" for="alloc-fhsa">
+                  <span class="alloc-row__icon">🏠</span>
+                  <span class="alloc-row__name">FHSA <span class="tip-trigger" data-tip="fhsa">ⓘ</span></span>
+                  <span class="alloc-row__hint" id="alloc-fhsa-hint">First home · $40k cap</span>
+                </label>
+                <div class="alloc-row__input-wrap">
+                  <span class="alloc-row__dollar">$</span>
+                  <input type="number" id="alloc-fhsa" class="alloc-input" min="0" step="50" value="0" placeholder="0" />
+                </div>
+              </div>
+              <div class="risk-toggle-row" id="risk-row-fhsa">
+                <span class="risk-toggle-label">Risk:</span>
+                <div class="risk-toggle-btns" data-account="fhsa">
+                  <button class="risk-btn risk-btn--active" data-type="index">📊 Index</button>
+                  <button class="risk-btn" data-type="stocks">📈 Stocks</button>
+                  <button class="risk-btn" data-type="crypto">₿ Crypto</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Surplus remainder -->
+            <div class="alloc-remainder">
+              <span class="alloc-remainder__label">💵 Cash after allocations</span>
+              <span class="alloc-remainder__val" id="alloc-cash-remainder">$0</span>
+            </div>
+            <div class="alloc-warning hidden" id="alloc-warning">⚠️ Over your monthly surplus — reduce to continue.</div>
+
+          </div><!-- /.month-section--allocate -->
+
+          <!-- Investment growth (shown if any accounts have balance) -->
+          <div class="month-section month-section--growth hidden" id="growth-section">
+            <div class="month-section__title">📈 Investment Returns</div>
+            <div class="month-row hidden" id="growth-hisa-row">
+              <span class="month-row__label">🏦 HISA</span>
+              <span class="month-row__val" id="growth-hisa-val"></span>
+            </div>
+            <div class="month-row hidden" id="growth-tfsa-row">
+              <span class="month-row__label">🌿 TFSA</span>
+              <span class="month-row__val" id="growth-tfsa-val"></span>
+            </div>
+            <div class="month-row hidden" id="growth-rrsp-row">
+              <span class="month-row__label">🏔️ RRSP</span>
+              <span class="month-row__val" id="growth-rrsp-val"></span>
+            </div>
+            <div class="month-row hidden" id="growth-fhsa-row">
+              <span class="month-row__label">🏠 FHSA</span>
+              <span class="month-row__val" id="growth-fhsa-val"></span>
+            </div>
+          </div>
+
+          <div class="month-action-bar">
+            <button class="btn-confirm-month" id="btn-confirm-month">Save Allocations ✓</button>
+            <button class="btn-next-inline" id="btn-next-inline" disabled>Next Month →</button>
+          </div>
+
+        </div><!-- /#month-card -->
+
+      </main><!-- /.col-centre -->
+
+
+      <!-- ════════════════════════════════════
+           RIGHT COLUMN — Chart + History Feed
+      ═════════════════════════════════════ -->
+      <aside class="col-right">
+
+        <!-- Net Worth Timeline Chart -->
+        <div class="nw-chart-panel">
+          <div class="nw-chart-header">
+            <span class="nw-chart-title">Net Worth</span>
+            <div class="nw-chart-legend">
+              <span class="nw-legend-item nw-legend-item--nw">▬ Net Worth</span>
+              <span class="nw-legend-item nw-legend-item--cash">▬ Cash</span>
+              <span class="nw-legend-item nw-legend-item--inv">╌ Invested</span>
+            </div>
+          </div>
+          <svg id="nw-chart" class="nw-chart-svg" viewBox="0 0 216 110" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+            <text x="50%" y="50%" text-anchor="middle" font-size="10" fill="#999" font-family="sans-serif">Play a few months to see your chart</text>
+          </svg>
+        </div>
+
+        <h2 class="col-heading">History</h2>
+        <div id="history-feed">
+          <p class="history-empty">No history yet. Start playing!</p>
+        </div>
+      </aside><!-- /.col-right -->
+
+    </div><!-- /.game-columns -->
+
+  </div><!-- /.game-shell -->
+
+
+  <script src="script.js"></script>
+</body>
+</html>
