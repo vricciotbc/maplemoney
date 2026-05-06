@@ -1533,7 +1533,14 @@ const loanConfig = {
   culinary:    { yearlyTuition:  3500, yearsInSchool: 2 },
   police:      { yearlyTuition:  3500, yearsInSchool: 2 },
   ece:         { yearlyTuition:  3000, yearsInSchool: 2 },
-  electrician: null, plumber: null, carpenter: null, mechanic: null, welder: null, hvac: null,
+  // Trades: yearlyTuition=0 means no tuition prompt — just tracks apprenticeship years
+  electrician: { yearlyTuition: 0, yearsInSchool: 4 },
+  plumber:     { yearlyTuition: 0, yearsInSchool: 4 },
+  carpenter:   { yearlyTuition: 0, yearsInSchool: 4 },
+  mechanic:    { yearlyTuition: 0, yearsInSchool: 3 },
+  welder:      { yearlyTuition: 0, yearsInSchool: 3 },
+  hvac:        { yearlyTuition: 0, yearsInSchool: 3 },
+  // Workforce: starts working immediately, no training period
   retail: null, service: null, office: null, warehouse: null,
 };
 
@@ -1602,7 +1609,7 @@ function deriveMonthlyIncome() {
 
 function initLoanSystem() {
   const config = loanConfig[playerCareerPath.tier2];
-  if (!config) { loanState.active = false; return; }
+  if (!config) { loanState.active = false; loanState.inSchool = false; return; }
   loanState.active        = true;
   loanState.yearlyTuition = config.yearlyTuition;
   loanState.yearsInSchool = config.yearsInSchool;
@@ -1612,8 +1619,11 @@ function initLoanSystem() {
   loanState.debtCleared   = false;
   loanState.monthlyIncome = deriveMonthlyIncome();
   loanState.monthlyPayment = Math.round(loanState.monthlyIncome * REPAYMENT_RATE);
-  loanPanel.classList.remove('hidden');
-  updateLoanDisplay();
+  // Only show loan panel for paths with actual tuition/debt
+  if (config.yearlyTuition > 0) {
+    loanPanel.classList.remove('hidden');
+    updateLoanDisplay();
+  }
 }
 
 
@@ -1795,17 +1805,27 @@ function processLoanForMonth() {
   if (loanState.inSchool) {
     const isYearBoundary = (month - 1) % 12 === 0;
     if (isYearBoundary) {
+      const isTrades = loanState.yearlyTuition === 0;
       if (loanState.currentYear < loanState.yearsInSchool) {
-        // Mid-program: show tuition and continue school
-        showTuitionPrompt();
+        // Mid-program: show tuition (or silently advance for trades)
+        if (!isTrades) { showTuitionPrompt(); }
         loanState.currentYear++;
+        if (isTrades) return '';  // no interrupt for trades — continue month normally
         return '';
       } else if (loanState.currentYear === loanState.yearsInSchool) {
-        // Final year: show tuition then graduate immediately after confirmation
-        showTuitionPrompt();
-        loanState.currentYear++;
-        // Mark as final-year so the tuition confirm triggers graduation
-        loanState.finalYearTuition = true;
+        // Final year: show tuition (or for trades, mark for graduation)
+        if (!isTrades) {
+          showTuitionPrompt();
+          loanState.currentYear++;
+          loanState.finalYearTuition = true;
+        } else {
+          loanState.currentYear++;
+          loanState.finalYearTuition = true;
+          // Immediately graduate for trades (no tuition confirmation needed)
+          loanState.finalYearTuition = false;
+          loanState.inSchool = false;
+          updateLoanDisplay();
+        }
         return '';
       } else {
         // Past final year — graduate now
@@ -3117,10 +3137,14 @@ function showJobOfferScreen() {
       </button>`;
   }).join('');
 
+  const isTrades = playerCareerPath.tier1 === 'trades';
+  const gradBadge = isTrades ? '🔧 Apprenticeship Complete — You\'re Certified!' : '🎓 Congratulations — You Graduated!';
+  const jobHeading = isTrades ? `Choose Your First ${careerName} Role` : `Choose Your First ${careerName} Job`;
+
   setMonthCardContent(`
     <div class="job-offer-screen">
-      <div class="job-offer-screen__badge">🎓 Congratulations — You Graduated!</div>
-      <h2 class="job-offer-screen__heading">Choose Your First ${careerName} Job</h2>
+      <div class="job-offer-screen__badge">${gradBadge}</div>
+      <h2 class="job-offer-screen__heading">${jobHeading}</h2>
       <p class="job-offer-screen__sub">Each offer has different pay, stability, and bonus potential. Your choice shapes your income for the years ahead.</p>
       <div class="job-offer-cards">${cardsHTML}</div>
       <div class="job-offer-confirm hidden" id="job-offer-confirm">
@@ -5965,6 +5989,10 @@ function showSchoolYearEnd(yearNum, _unused, ctx) {
     : `<div class="review-stat review-stat--pos"><span>Student Debt</span><strong class="pos">$0 — debt-free!</strong></div>`;
 
   // Tuition line
+  const isTrades = loanState.yearlyTuition === 0 && loanState.active;
+  const histLabel   = isTrades ? '🔧 Apprentice Year' : '📚 School Year';
+  const panelTitle  = isTrades ? '🔧 Apprenticeship Progress' : '🎓 Academic Progress';
+
   const tuitionLine = tuitionPaid > 0
     ? `<div class="review-stat"><span>Tuition This Year</span><strong>${formatCurrency(tuitionPaid)}</strong></div>`
     : '';
@@ -5972,11 +6000,17 @@ function showSchoolYearEnd(yearNum, _unused, ctx) {
   // Savings insight
   let insight;
   if (invested === 0) {
-    insight = '⚠️ No savings this year — even $25/month in a HISA builds the habit and earns interest. Small amounts add up before graduation.';
+    insight = isTrades
+      ? '⚠️ No savings this year — even $25/month in a HISA builds the habit while you\'re earning as an apprentice.'
+      : '⚠️ No savings this year — even $25/month in a HISA builds the habit and earns interest. Small amounts add up before graduation.';
   } else if (invested >= 500) {
-    insight = `✅ You managed to save ${formatCurrency(invested)} while in school — a great start. Money invested now has the most time to compound.`;
+    insight = isTrades
+      ? `✅ You managed to save ${formatCurrency(invested)} while apprenticing — a great start. Money invested now has the most time to compound.`
+      : `✅ You managed to save ${formatCurrency(invested)} while in school — a great start. Money invested now has the most time to compound.`;
   } else {
-    insight = `📈 You saved ${formatCurrency(invested)} this year. School is tough on budgets, but every dollar saved is a dollar working for you.`;
+    insight = isTrades
+      ? `📈 You saved ${formatCurrency(invested)} this year. Apprenticeship wages can be tight — every dollar saved is a dollar working for you.`
+      : `📈 You saved ${formatCurrency(invested)} this year. School is tough on budgets, but every dollar saved is a dollar working for you.`;
   }
 
   // OSAP recap
@@ -5991,21 +6025,25 @@ function showSchoolYearEnd(yearNum, _unused, ctx) {
   // Add history marker
   const histDiv = document.createElement('div');
   histDiv.className = 'history-tax-marker history-tax-marker--review';
-  histDiv.innerHTML = `<span>📚 School Year ${schoolYear}/${totalYears} Complete</span><span style="color:${nwColor}">${nwSign}${formatCurrency(nwChange)}</span>`;
+  histDiv.innerHTML = `<span>${histLabel} ${schoolYear}/${totalYears} Complete</span><span style="color:${nwColor}">${nwSign}${formatCurrency(nwChange)}</span>`;
   historyFeed.insertBefore(histDiv, historyFeed.firstChild);
 
   const yearsLeft = totalYears - schoolYear;
   const progressPct = Math.round((schoolYear / totalYears) * 100);
+  const yearBadgeLabel = isTrades ? '🔧 Apprentice Year' : '📚 School Year';
+  const continueLabel  = yearsLeft > 0
+    ? (isTrades ? 'Continue Apprenticeship Year ' + (schoolYear + 1) + ' →' : 'Start Year ' + (schoolYear + 1) + ' →')
+    : (isTrades ? 'Complete Apprenticeship →' : 'Continue to Graduation →');
 
   setMonthCardContent(`
     <div class="year-reflection year-end-combined">
-      <div class="year-reflection__badge">📚 School Year ${schoolYear} of ${totalYears} Complete · Age ~${17 + yearNum}</div>
+      <div class="year-reflection__badge">${yearBadgeLabel} ${schoolYear} of ${totalYears} Complete · Age ~${17 + yearNum}</div>
 
       <div class="year-end-combined__sections">
 
-        <!-- School Progress Panel -->
+        <!-- School/Apprenticeship Progress Panel -->
         <div class="year-end-combined__panel year-end-combined__panel--career">
-          <div class="year-end-combined__panel-title">🎓 Academic Progress</div>
+          <div class="year-end-combined__panel-title">${panelTitle}</div>
           <div style="margin:8px 0 12px">
             <div style="background:var(--clr-border);border-radius:6px;height:8px;overflow:hidden">
               <div style="background:var(--clr-forest);height:100%;width:${progressPct}%;transition:width 0.4s"></div>
@@ -6064,7 +6102,7 @@ function showSchoolYearEnd(yearNum, _unused, ctx) {
       </div>
 
       <button class="btn-confirm-month review-continue hidden" id="btn-school-yearend-continue">
-        ${yearsLeft > 0 ? 'Start Year ' + (schoolYear + 1) + ' →' : 'Continue to Graduation →'}
+        ${continueLabel}
       </button>
     </div>`);
 
